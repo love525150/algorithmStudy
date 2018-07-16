@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+'''
+算法逻辑：找出列表里最小的元素，然后与列表里第一个位置的元素交互位置，如此重复换到第二个位置，直到所有位置的元素确定
+'''
 def selection_sort(sorting_list):
 
     for i in range(len(sorting_list)):
