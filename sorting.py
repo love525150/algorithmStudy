@@ -77,6 +77,40 @@ def bubble_sort(sorting_list):
         
         if sorted: break
 
+def merge_sort(sorting_list):
+    return _recrusive_merge_sort(sorting_list, 0, len(sorting_list))
+
+
+def _recrusive_merge_sort(list_, left, right):
+    if (left < right):
+        mid = int((left + right) / 2)
+        llist = _recrusive_merge_sort(list_, left, mid)
+        rlist = _recrusive_merge_sort(list_, mid + 1, right)
+        return _merge(llist, rlist)
+    
+    else :
+        return list_[left: left+1]
+
+
+def _merge(list1, list2):
+    index1 = 0
+    index2 = 0
+    temp_list = []
+    while index1 < len(list1) and index2 < len(list2):
+        if list1[index1] < list2[index2]:
+            temp_list.append(list1[index1])
+            index1 += 1
+        else :
+            temp_list.append(list2[index2])
+            index2 += 1
+    
+    if (index1 < len(list1)):
+        temp_list.extend(list1[index1: len(list1)])
+
+    if (index2 < len(list2)):
+        temp_list.extend(list2[index2: len(list2)])
+    
+    return temp_list
 
 def test_sort():
     # selection_sort_test_list = [4,66,74,25]
@@ -85,11 +119,15 @@ def test_sort():
 
     # insertion_sort_test_list = [4,66,74,25,125,908,456,9,36]
     # insert_sort_improved_version(insertion_sort_test_list)
-    # print("selection sort排序结果：" + str(insertion_sort_test_list))
+    # print("插入排序结果：" + str(insertion_sort_test_list))
 
-    bubble_sort_test_list = [4,66,74,25,125,908,456,9,36]
-    bubble_sort(bubble_sort_test_list)
-    print("selection sort排序结果：" + str(bubble_sort_test_list))
+    # bubble_sort_test_list = [4,66,74,25,125,908,456,9,36]
+    # bubble_sort(bubble_sort_test_list)
+    # print("冒泡排序结果：" + str(bubble_sort_test_list))
+
+    merge_sort_test_list = [4,66,74,25,125,908,456,9,36]
+    sorted = merge_sort(merge_sort_test_list)
+    print("归并排序结果：" + str(sorted))
 
 
 test_sort()
