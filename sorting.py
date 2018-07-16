@@ -63,15 +63,33 @@ def _insert_list_value(_list, source_position, target_position):
     
     _list[target_position] = insert_element
 
+'''
+算法逻辑：不断进行前后两两比较，位置不对则进行交换，每遍历一次可以排到一个最大的到元素到末尾
+'''
+def bubble_sort(sorting_list):
+    for i in range(0, len(sorting_list) - 1):
+        sorted = True
+        
+        for j in range (0, len(sorting_list) - 1 - i):
+            if sorting_list[j] > sorting_list[j + 1]:
+                _switch_list_value(sorting_list, j, j + 1)
+                sorted = False
+        
+        if sorted: break
+
 
 def test_sort():
     # selection_sort_test_list = [4,66,74,25]
     # selection_sort(selection_sort_test_list)
     # print("selection sort排序结果：" + str(selection_sort_test_list))
 
-    insertion_sort_test_list = [4,66,74,25,125,908,456,9,36]
-    insert_sort_improved_version(insertion_sort_test_list)
-    print("selection sort排序结果：" + str(insertion_sort_test_list))
+    # insertion_sort_test_list = [4,66,74,25,125,908,456,9,36]
+    # insert_sort_improved_version(insertion_sort_test_list)
+    # print("selection sort排序结果：" + str(insertion_sort_test_list))
+
+    bubble_sort_test_list = [4,66,74,25,125,908,456,9,36]
+    bubble_sort(bubble_sort_test_list)
+    print("selection sort排序结果：" + str(bubble_sort_test_list))
 
 
 test_sort()
