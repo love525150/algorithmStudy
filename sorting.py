@@ -116,6 +116,52 @@ def _merge(list1, list2):
     return temp_list
 
 
+def quick_sort(sorting_list):
+    """快速排序"""
+    _recrusive_quick_sort(sorting_list, 0, len(sorting_list) - 1)
+
+
+def _recrusive_quick_sort(sorting_list, left, right):
+    if left == right:
+        return
+    
+    partition_index = _partition(sorting_list, left, right)
+    
+    _recrusive_quick_sort(sorting_list, left, partition_index - 1)
+    _recrusive_quick_sort(sorting_list, partition_index, right)
+
+
+def _partition(sorting_list, left, right):
+    """快速排序的核心，
+    通过一次scan将数组分成两部分，前半部分都是小于等于基值（数组第一个元素）的元素，后半部分都是大于等于基值的元素，
+    返回值是后半部分第一个元素的索引值（切分位置，用于后面递归调用partition）
+    """
+    base = sorting_list[left]
+    left_scan = left + 1
+    right_scan = right
+    while True:
+        while left_scan < right_scan:
+            if sorting_list[left_scan] > base:
+                break
+            else:
+                left_scan += 1
+
+        while right_scan > left_scan:
+            if sorting_list[right_scan] < base:
+                break
+            else:
+                right_scan -= 1
+
+        if left_scan == right_scan:
+            if base > sorting_list[left_scan]:
+                _switch_list_value(sorting_list, left, left_scan)
+            break
+        else:
+            _switch_list_value(sorting_list, left_scan, right_scan)
+    
+    return left_scan
+
+
 def test_sort():
     # selection_sort_test_list = [4,66,74,25]
     # selection_sort(selection_sort_test_list)
@@ -129,9 +175,13 @@ def test_sort():
     # bubble_sort(bubble_sort_test_list)
     # print("冒泡排序结果：" + str(bubble_sort_test_list))
 
-    merge_sort_test_list = [4, 66, 74, 25, 125, 908, 456, 9, 36]
-    merge_sort(merge_sort_test_list)
-    print("归并排序结果：" + str(merge_sort_test_list))
+    # merge_sort_test_list = [4, 66, 74, 25, 125, 908, 456, 9, 36]
+    # merge_sort(merge_sort_test_list)
+    # print("归并排序结果：" + str(merge_sort_test_list))
+
+    quick_sort_test_list = [4, 66, 74, 25, 125, 908, 456, 9, 36]
+    quick_sort(quick_sort_test_list)
+    print("快速排序结果：" + str(quick_sort_test_list))
 
 
 test_sort()
