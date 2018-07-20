@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+from tree import MinHeap
 
 def selection_sort(sorting_list):
     """算法逻辑：找出列表里最小的元素，然后与列表里第一个位置的元素交互位置，如此重复换到第二个位置，直到所有位置的元素确定"""
@@ -162,6 +162,16 @@ def _partition(sorting_list, left, right):
     return left_scan
 
 
+def heap_sort(sorting_list):
+    """堆排序，核心是利用最小堆
+    将排序列表转换成一个最小堆，通过堆的特性每次pop出最小的值从而完成排序"""
+    min_heap = MinHeap(sorting_list)
+    
+    for i in range(len(sorting_list)):
+        sorting_list[i] = min_heap.pop()
+
+
+
 def test_sort():
     # selection_sort_test_list = [4,66,74,25]
     # selection_sort(selection_sort_test_list)
@@ -179,9 +189,13 @@ def test_sort():
     # merge_sort(merge_sort_test_list)
     # print("归并排序结果：" + str(merge_sort_test_list))
 
-    quick_sort_test_list = [4, 66, 74, 25, 125, 908, 456, 9, 36]
-    quick_sort(quick_sort_test_list)
-    print("快速排序结果：" + str(quick_sort_test_list))
+    # quick_sort_test_list = [4, 66, 74, 25, 125, 908, 456, 9, 36]
+    # quick_sort(quick_sort_test_list)
+    # print("快速排序结果：" + str(quick_sort_test_list))
+
+    heap_sort_test_list = [4, 66, 74, 25, 125, 908, 456, 9, 36]
+    heap_sort(heap_sort_test_list)
+    print("堆排序结果：" + str(heap_sort_test_list))
 
 
 test_sort()
