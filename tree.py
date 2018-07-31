@@ -193,21 +193,125 @@ class BinarySearchTree:
             self.right = None
 
 
-tree = BinarySearchTree()
-tree.put(2, "tow")
-tree.put(1, "one")
-tree.put(3, "three")
-tree.put(0, "zero")
-tree.put(1.5, "tow.five")
+class RedBlackTree(BinarySearchTree):
+    """红黑树，也是标准的二叉搜索树，树中的链接分为两种，红链接将两个2-节点连接起来构成一个3-节点，黑连接则是2-3树中的普通链接
+    满足下列条件：
+    1. 红链接均为左链接
+    2. 没有任何一个节点同时和两条红链接相连
+    3. 该树是完美黑色平衡的，即任意空链接到根节点的路径上的黑链接数量相同
+    
+    实现的理论来源是2-3树，是用二叉搜索树模拟2-3的实现。
+    因为是标准的二叉搜索树，所以，二叉树的所有api实现都是能够使用的（除了插入删除时逻辑不同）
+    """
+    RED = "RED"
+    BLACK = "BLACK"
 
-print(tree.get(0))
-print(tree.get(8))
+    def __init__(self):
+        BinarySearchTree.__init__(self)
+
+    class Node:
+        def __init__(self, key, value, color):
+            self.key = key
+            self.value = value
+            self.color = color
+            self.left = None
+            self.right = None
+
+    def is_red(self, node):
+        if node is None:
+            return False
+        return node.color == RedBlackTree.RED
+
+    def rotate_left(self, node):
+        """左旋转，将右边的红链接转到左边"""
+        replacement = node.right
+        node.right = replacement.left
+        replacement.left = node
+        replacement.color = node.color
+        node.color = RedBlackTree.RED
+        # 下面是精髓，把replacement node作为返回值返回，这样指向node的那个引用在本方法结束之后就能指向replacement node
+        return replacement
+
+    def rotate_right(self, node):
+        """右旋转，将左边的红链接转到右边"""
+        replacement = node.left
+        node.left = replacement.right
+        replacement.right = node
+        replacement.color = node.color
+        node.color = RedBlackTree.RED
+        # 下面是精髓，把replacement node作为返回值返回，这样指向node的那个引用在本方法结束之后就能指向replacement node
+        return replacement
+
+    def flip_colors(self, node):
+        """当节点左右两边链接都是红色的时候调用"""
+        node.color = RedBlackTree.RED
+        node.left.color = RedBlackTree.BLACK
+        node.right.color = RedBlackTree.BLACK
+
+    def put(self, key, value):
+        self.root = self._put(self.root, key, value)
+        self.root.color = RedBlackTree.BLACK
+
+    def _put(self, node, key, value):
+        replacement = node
+        if node is None:
+            # 新插入节点是红链接
+            return self.Node(key, value, RedBlackTree.RED)
+
+        if key < node.key:
+            # 在node的左边
+            node.left = self._put(node.left, key, value)
+        elif key > node.key:
+            # 在node的右边
+            node.right = self._put(node.right, key, value)
+        else:
+            node.value = value
+
+        # 插入完后递归向上检查父节点，看看是否需要作出调整，这里是红黑树保持平衡的关键
+        # 三个判断的顺序不能乱，因为是有可能连续满足的
+        if self.is_red(node.right) and not self.is_red(node.left):
+            replacement = self.rotate_left(node)
+        if self.is_red(node.left) and self.is_red(node.left.left):
+            replacement = self.rotate_right(node)
+        if self.is_red(node.left) and self.is_red(node.right):
+            self.flip_colors(node)
+
+        # 返回一个替代的节点给父节点引用，没有发生旋转的话就是原来的节点
+        return replacement
+
+
+
+# tree = BinarySearchTree()
+# tree.put(2, "tow")
+# tree.put(1, "one")
+# tree.put(3, "three")
+# tree.put(0, "zero")
+# tree.put(1.5, "tow.five")
+#
+# print(tree.get(0))
+# print(tree.get(8))
+# print(tree.max_key())
+# print(tree.min_key())
+#
+# tree.delete(2)
+# print(tree.min_key())
+# tree.delete(0)
+# print(tree.min_key())
+# tree.delete(1)
+# print(tree.min_key())
+
+tree = RedBlackTree()
+tree.put(1, "1")
+tree.put(2, "2")
+tree.put(3, "3")
+tree.put(4, "4")
+tree.put(5, "5")
+tree.put(6, "6")
+tree.put(7, "7")
+tree.put(8, "8")
+
+print(tree.get(1))
+print(tree.get(9))
 print(tree.max_key())
 print(tree.min_key())
-
-tree.delete(2)
-print(tree.min_key())
-tree.delete(0)
-print(tree.min_key())
-tree.delete(1)
-print(tree.min_key())
+print(tree.root.key)
