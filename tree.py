@@ -184,6 +184,25 @@ class BinarySearchTree:
     def is_empty(self):
         return self.root is None
 
+    def range(self, lo, high):
+        result = []
+        self._range(self.root, lo, high, result)
+        return result
+
+    def _range(self, node, lo, high, _list):
+        """使用中序遍历，这样可以保证节点值进入列表时是按序的"""
+        if node is None:
+            return
+        
+        if node.key > lo: #如果node <= lo，则node的左子树都比lo小，不用再去左子树里面遍历了，这里是取反了
+            self._range(node.left, lo, high, _list)
+        
+        if node.key >= lo and node.key <= high:
+            _list.append(node.key)
+        
+        if node.key < high:
+            self._range(node.right, lo, high, _list)
+
     class Node:
 
         def __init__(self, key, value):
@@ -205,9 +224,11 @@ print(tree.get(8))
 print(tree.max_key())
 print(tree.min_key())
 
-tree.delete(2)
-print(tree.min_key())
-tree.delete(0)
-print(tree.min_key())
-tree.delete(1)
-print(tree.min_key())
+# tree.delete(2)
+# print(tree.min_key())
+# tree.delete(0)
+# print(tree.min_key())
+# tree.delete(1)
+# print(tree.min_key())
+
+print(tree.range(1, 3))
